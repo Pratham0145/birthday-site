@@ -1,0 +1,18 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Project cache
+cachepycache/
+cachetemp/
+
+# Node
+node_modules/
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db

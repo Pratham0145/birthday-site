@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#fdf6ee">
+<title>Happy Birthday, Devva</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Caveat:wght@500;600&family=Karla:wght@400;500;600&family=Baloo+Tamma+2:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-scene="intro">
+
+<!-- decorative stars/dots, pure CSS -->
+<div class="deco" aria-hidden="true">
+  <span class="deco__star deco__star--1">&#10022;</span>
+  <span class="deco__star deco__star--2">&#10022;</span>
+  <span class="deco__star deco__star--3">&#10022;</span>
+  <span class="deco__dot deco__dot--1"></span>
+  <span class="deco__dot deco__dot--2"></span>
+</div>
+
+<!-- ── 1. opening ──────────────────────────────────────────────────────── -->
+<section class="scene scene--intro is-active" id="scene-intro" data-scene="intro" aria-hidden="false">
+  <div class="intro">
+    <p class="intro__line intro__line--1" data-open-1></p>
+    <p class="intro__line intro__line--2" data-open-2></p>
+    <button class="btn btn--big intro__btn" id="openBtn" type="button">Open it</button>
+  </div>
+</section>
+
+<!-- ── 2. video ────────────────────────────────────────────────────────── -->
+<section class="scene scene--video" id="scene-video" data-scene="video" aria-hidden="true">
+  <div class="video-stage" id="videoStage">
+    <div class="video-frame">
+      <video id="openingVideo" class="video" playsinline webkit-playsinline preload="auto">
+        <source src="assets/video/opening.mp4" type="video/mp4">
+      </video>
+    </div>
+    <button class="video-skip" id="videoSkip" type="button">Skip</button>
+  </div>
+</section>
+
+<!-- ── 3. birthday reveal ──────────────────────────────────────────────── -->
+<section class="scene scene--birthday" id="scene-birthday" data-scene="birthday" aria-hidden="true">
+  <div class="birthday">
+    <h1 class="birthday__title">
+      <span data-bd-title></span>
+      <span class="birthday__name" data-bd-name></span>
+    </h1>
+    <p class="birthday__message" data-bd-message></p>
+    <p class="birthday__kn kn" data-bd-kannada></p>
+    <button class="btn" id="toMessages" type="button">Keep going</button>
+  </div>
+</section>
+
+<!-- ── 4. friendship messages ──────────────────────────────────────────── -->
+<section class="scene scene--messages" id="scene-messages" data-scene="messages" aria-hidden="true">
+  <div class="messages">
+    <button class="msg-card" id="msgCard" type="button" aria-label="Show another message">
+      <p class="msg-card__text kn" data-msg-text></p>
+      <span class="msg-card__hint">tap for another</span>
+    </button>
+    <button class="btn" id="toMore" type="button">Continue</button>
+  </div>
+</section>
+
+<!-- ── 5. one more thing ───────────────────────────────────────────────── -->
+<section class="scene scene--more" id="scene-more" data-scene="more" aria-hidden="true">
+  <div class="more-card">
+    <p class="more-card__kicker" data-more-kicker></p>
+    <h2 class="more-card__title" data-more-title></h2>
+    <p class="more-card__line kn" data-more-line></p>
+    <button class="btn" id="exploreBtn" type="button">Look Closer</button>
+
+    <div class="more-card__after">
+      <button class="btn btn--quiet" id="toFinal" type="button">One last thing</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── 6. final ────────────────────────────────────────────────────────── -->
+<section class="scene scene--final" id="scene-final" data-scene="final" aria-hidden="true">
+  <div class="final">
+    <p class="final__kicker" data-final-kicker></p>
+    <h2 class="final__title" data-final-title></h2>
+    <p class="final__line" data-final-line></p>
+    <p class="final__kn kn" data-final-kannada></p>
+    <button class="btn btn--quiet" id="restartBtn" type="button">Start Again</button>
+  </div>
+</section>
+
+<!-- ── chrome ──────────────────────────────────────────────────────────── -->
+<button class="back-btn" id="backBtn" type="button" aria-label="Go back a step">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<button class="music-toggle" id="musicToggle" type="button" aria-pressed="false" aria-label="Play the music">
+  <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+</button>
+
+<audio id="bgm" src="assets/audio/song.mp3" loop preload="auto"></audio>
+
+<!-- infinite zoom -->
+<div class="zoom-overlay" id="zoomOverlay" hidden>
+  <canvas id="zoomCanvas"></canvas>
+  <div class="zoom-loading" id="zoomLoading">opening…</div>
+  <div class="hint-badge" id="zoomHint">Pinch to zoom &amp; rotate · Scroll to zoom, Shift+Scroll to rotate</div>
+  <button class="zoom-back" id="zoomBack" type="button">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back to Birthday
+  </button>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/music.js"></script>
+<script src="js/video.js"></script>
+<script src="js/messages.js"></script>
+<script src="js/infinite-zoom.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
