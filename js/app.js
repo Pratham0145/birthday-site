@@ -9,7 +9,7 @@
 (function () {
   const C = window.CONFIG;
   const scenes = {};
-  const ORDER = ['intro', 'video', 'birthday', 'messages', 'more', 'final'];
+  const ORDER = ['intro', 'video', 'birthday', 'messages', 'more', 'surprise2', 'kids', 'final'];
   let currentScene = null;
   let zoomOpen = false;
   let booted = false;
@@ -33,9 +33,10 @@
     currentScene = next;
     document.body.dataset.scene = id;
 
-    $('#backBtn').classList.toggle('is-visible', ['messages', 'more', 'final'].includes(id));
+    $('#backBtn').classList.toggle('is-visible', ['messages', 'more', 'surprise2', 'final'].includes(id));
 
     if (id === 'more') window.InfiniteZoom.preload();
+    if (id === 'surprise2') { const kv = $('#kidsVideo'); if (kv) kv.load(); }
 
     next.scrollTop = 0;
     window.scrollTo(0, 0);
@@ -137,6 +138,41 @@
     });
   }
 
+
+  function initKidsSurprise() {
+    const kidsBtn = $('#kidsBtn');
+    const kidsVideo = $('#kidsVideo');
+    const kidsSkip = $('#kidsSkip');
+    const kidsStage = $('#kidsStage');
+    let finished = false;
+
+    function finishKids() {
+      if (finished) return;
+      finished = true;
+      window.Music.unduck();
+      navigateToSection('final');
+    }
+
+    kidsBtn.addEventListener('click', () => {
+      finished = false;
+      navigateToSection('kids');
+      window.Music.duck();
+      kidsSkip.classList.remove('is-visible');
+      kidsStage.classList.remove('is-playing');
+
+      kidsVideo.currentTime = 0;
+      const attempt = kidsVideo.play();
+      if (attempt && attempt.catch) attempt.catch(() => {});
+
+      setTimeout(() => kidsSkip.classList.add('is-visible'), 2600);
+    });
+
+    kidsVideo.addEventListener('playing', () => kidsStage.classList.add('is-playing'));
+    kidsVideo.addEventListener('ended', finishKids);
+    kidsVideo.addEventListener('error', finishKids);
+    kidsSkip.addEventListener('click', () => { kidsVideo.pause(); finishKids(); });
+  }
+
   /* --- final ------------------------------------------------------------- */
 
   function initFinal() {
@@ -153,6 +189,11 @@
       scenes.birthday.classList.remove('is-ready');
       scenes.more.classList.remove('has-returned');
       $('#openBtn').disabled = false;
+      const kidsVideo = $('#kidsVideo');
+      kidsVideo.pause();
+      kidsVideo.currentTime = 0;
+      $('#kidsStage').classList.remove('is-playing');
+      $('#kidsSkip').classList.remove('is-visible');
       navigateToSection('intro');
       window.Music.restart();   // the song keeps playing, just from the top
     });
@@ -175,12 +216,13 @@
     initBirthday();
     initMessages();
     initMore();
+    initKidsSurprise();
     initFinal();
 
     $('#backBtn').addEventListener('click', goBack);
     $('#toMessages').addEventListener('click', () => navigateToSection('messages'));
     $('#toMore').addEventListener('click', () => navigateToSection('more'));
-    $('#toFinal').addEventListener('click', () => navigateToSection('final'));
+    $('#toFinal').addEventListener('click', () => navigateToSection('surprise2'));
 
     setTimeout(() => window.OpeningVideo.preload(), 900);
     window.navigateToSection = navigateToSection;

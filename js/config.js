@@ -60,9 +60,9 @@ window.CONFIG = (function () {
 
   /* --- final screen -------------------------------------------------------- */
   const FINAL = {
-    kicker: "Okay, that's it",
-    title: 'Happy Birthday again, Devva!',
-    line: 'Keep smiling. Keep shining. Keep being you.',
+    kicker: 'Once again,',
+    title: 'Happy Birthday, Devva!',
+    line: 'That was one little surprise from some very special little people. Keep smiling, keep shining and keep being the same wonderful person you are, Annu.',
     kannada: 'ಎಲ್ಲಾ ಚೆನ್ನಾಗಿ ಆಗಲಿ ದೇವ್ವಾ.',
     button: 'Start Again'
   };
